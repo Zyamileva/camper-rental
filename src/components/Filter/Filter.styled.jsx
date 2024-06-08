@@ -29,6 +29,7 @@ export const FilterWrapper = styled.div`
 export const SelectedLocation = styled.div``;
 
 export const InputWrapper = styled.div`
+  position: relative;
   max-width: 360px;
 `;
 
@@ -43,6 +44,7 @@ export const Label = styled.label`
 `;
 
 export const Input = styled.div`
+  position: relative;
   color: #101828;
   background-color: #f7f7f7;
   padding: 18px;
@@ -55,6 +57,8 @@ export const LocationIcon = styled(IoLocationOutline)`
   width: 18px;
   height: 20px;
 `;
+
+export const SelectedItem = styled.div``;
 
 export const EquipmentWrapper = styled.div`
   display: flex;
@@ -79,7 +83,22 @@ export const Line = styled.div`
   opacity: 10%;
 `;
 
-export const SelectedOption = styled.div``;
+export const SelectedOption = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 150px;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  box-shadow: 0 4px 36px 0 rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(18, 20, 23, 0.05);
+  border-radius: 1px;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  border-radius: 8px;
+  background-color: gray;
+`;
 
 export const SelectedEquipmentWrapper = styled.div`
   display: flex;
@@ -119,4 +138,26 @@ export const FormButtonsWrapper = styled.div`
   justify-content: space-between;
 `;
 
-export const FormSearchBtn = styled.button``;
+export const FormSearchBtn = styled.button`
+  border: none;
+  outline: none;
+  background: none;
+  border-radius: 200px;
+  padding: 16px 60px;
+  width: 173px;
+  height: 56px;
+
+  color: white;
+  /* transition: var(--primary-transition); */
+
+  background-color: red;
+
+  &:hover {
+    background-color: pink;
+    cursor: pointer;
+  }
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+`;
