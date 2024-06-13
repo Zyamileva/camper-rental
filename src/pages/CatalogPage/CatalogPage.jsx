@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   CatalogContainer,
   FilterContainer,
   CarsContainer,
 } from './CatalogPage.styled';
+
+import CarsItem from '../../components/CarsItem/CarsItem';
 import Filter from '../../components/Filter/Filter';
-import fetchCars from '../../redux/cars/cars-operations';
-import selectFiltersCars from '../../redux/cars/cars-selectors';
+import { fetchCars } from '../../redux/cars/cars-operations';
+import { selectFiltersCars, selectCars } from '../../redux/cars/cars-selectors';
+import { v4 as uuid } from 'uuid';
+import splitAndCapitalize from '../../helpers/camelCase';
 
 const CatalogPage = () => {
+  const dispatch = useDispatch();
+  const cars = useSelector(selectCars);
+
   const [displayedCars, setDisplayedCars] = useState([]);
 
   const [filteredSearch, setFilteredSearch] = useState(false);
@@ -31,18 +39,26 @@ const CatalogPage = () => {
       try {
         setShowLoadBtn(page < totalPage);
         await dispatch(fetchCars(page)).unwrap();
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     }
     fetchedData();
-  }, [dispatch, page, totalCars]);
+  }, [dispatch, page, totalPage]);
 
-  // function filteredByCars() {
-  //   displayedCars.filter((item) => {
-  //     filteredCars.
-  //   });
-  // }
+  function filteredByCars() {
+    const filtered = displayedCars.filter((item) => {
+      const filterLocation =
+        !filteredCars.location || item.location === filteredCars.location;
+
+      const locationFilter =
+        !filteredCars.type ||
+        splitAndCapitalize(item.form) === filteredCars.type;
+
+      return filterLocation && locationFilter;
+    });
+    return filtered;
+  }
+
+  const visibleCars = filteredByCars();
 
   return (
     <CatalogContainer>
@@ -53,7 +69,17 @@ const CatalogPage = () => {
           setFilteredSearch={setFilteredSearch}
         />
       </FilterContainer>
-      <CarsContainer></CarsContainer>
+      <CarsContainer>
+        {visibleCars && visibleCars.length === 0 && filteredSearch
+          ? 'Not search'
+          : visibleCars.length > 0
+          ? visibleCars?.map((item) => {
+              return <CarsItem key={uuid()} item={item} />;
+            })
+          : cars?.map((item) => {
+              return <CarsItem key={uuid()} item={item} />;
+            })}
+      </CarsContainer>
     </CatalogContainer>
   );
 };
